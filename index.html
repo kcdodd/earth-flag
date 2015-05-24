@@ -1,0 +1,63 @@
+<html>
+    <head>
+
+        <script>
+            window.onload = function() {
+
+                var canvas = document.getElementById("flag");
+                var ctx = canvas.getContext("2d");
+
+                var w = canvas.width;
+                var h = canvas.height;
+
+                var rcolor = function() {
+                    return "rgb(" + Math.floor(255*Math.random()) + "," + Math.floor(255*Math.random()) + "," + Math.floor(255*Math.random()) + ")";
+                };
+
+                var p = function() {
+                    var x = Math.random();
+
+                    return x*(1 - Math.sqrt(1-x)) + (1-x)*Math.sqrt(x);
+                }
+
+                var drawRect = function(x0, x1, y0, y1, depth){
+
+                    if (depth <= 1) {
+                        ctx.fillStyle = rcolor();
+                        ctx.beginPath();
+                        ctx.moveTo(x0,y0);
+                        ctx.lineTo(x1,y0);
+                        ctx.lineTo(x0,y1);
+                        ctx.fill();
+
+                        ctx.fillStyle = rcolor();
+                        ctx.beginPath();
+                        ctx.moveTo(x1,y0);
+                        ctx.lineTo(x1,y1);
+                        ctx.lineTo(x0,y1);
+                        ctx.fill();
+                    }else{
+                        depth--;
+
+                        var a = Math.floor(p() * depth);
+                        var b = depth - a;
+                        var c1 = Math.floor(p() * a);
+                        var c2 = Math.floor(p() * b);
+
+                        drawRect(x0, 0.5*(x1+x0), y0, 0.5*(y1+y0), c1);
+                        drawRect(0.5*(x1+x0), x1, y0, 0.5*(y1+y0), c2);
+                        drawRect(x0, 0.5*(x1+x0), 0.5*(y1+y0), y1, a - c1);
+                        drawRect(0.5*(x1+x0), x1, 0.5*(y1+y0), y1, b - c2);
+                    }
+
+
+                };
+
+                drawRect(0, w, 0, h, 2000);
+            };
+        </script>
+    </head>
+    <body>
+        <canvas id="flag" width="900" height="600"></canvas>
+    </body>
+</html
